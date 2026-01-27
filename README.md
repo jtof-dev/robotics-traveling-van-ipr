@@ -1,38 +1,40 @@
 # robotics traveling van inverted pendulum robot
 
+- this branch is written for an arduino uno
+
 the code needed to power an inverted pendulum robot with four (or two) motors. currently written for an arduino uno, but will later be rewritten for a difference board (unsure on which one yet)
 
 - this code is made much simpler thanks to [this PID controller library](https://github.com/br3ttb/Arduino-PID-Library)
 - I referenced [Ian Carey's inverted pendulum code](https://gist.github.com/careyi3/d087f707b33c665915bd611e5514a355) for help with organizing the code, thank you!!
 
 ```ascii flowchart
-      ┌───────────────────┐          ┌─────────┐          ┌──────────────────┐          
-      │                   │          │         │          │                  │          
-      │ send brake signal │◄─────────┤ setup() ├─────────►│ initialize pins  │          
-      │     to motors     │          │         │          │                  │          
-      │                   │          └────┬────┘          └──────────────────┘          
-      └───────────────────┘               │                                             
-                                          │                                             
-                                          │                                             
-                                          │                                             
-                                          │                                             
-                                          ▼                                             
+      ┌───────────────────┐          ┌─────────┐          ┌──────────────────┐
+      │                   │          │         │          │                  │
+      │ send brake signal │◄─────────┤ setup() ├─────────►│ initialize pins  │
+      │     to motors     │          │         │          │                  │
+      │                   │          └────┬────┘          └──────────────────┘
+      └───────────────────┘               │
+                                          │
+                                          │
+                                          │
+                                          │
+                                          ▼
 ┌─────────────────────────┐          ┌────────┐           ┌────────────────────────────┐
 │                         │          │        │           │                            │
 │ send specific speed PWM ├─────────►│ loop() ┼──────────►│ read potentiometer values  │
 │     value to motors     │          │        │           │                            │
 │                         │          └────────┘           └──────────────────┬─────────┘
-└─────────────────────────┘                                                  │          
-       ▲                                                                     │          
-       │                                                                     │          
-       │                                                                     │          
-       │                                                                     │          
-       │                                                                     │          
-       │     ┌─────────────────────┐            ┌─────────────────────┐      │          
-       │     │                     │            │                     │      │          
-       └─────┤ adjust output value │◄───────────┤ run PID calculation │◄─────┘          
-             │                     │            │                     │                 
-             └─────────────────────┘            └─────────────────────┘                 
+└─────────────────────────┘                                                  │
+       ▲                                                                     │
+       │                                                                     │
+       │                                                                     │
+       │                                                                     │
+       │                                                                     │
+       │     ┌─────────────────────┐            ┌─────────────────────┐      │
+       │     │                     │            │                     │      │
+       └─────┤ adjust output value │◄───────────┤ run PID calculation │◄─────┘
+             │                     │            │                     │
+             └─────────────────────┘            └─────────────────────┘
 ```
 
 # notes to self
