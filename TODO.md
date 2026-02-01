@@ -16,5 +16,6 @@
 # robot 2
 
 - we need to decide on which sensor to use
-- [ ] implement the new sensor in code
+- [x] implement the new sensor in code
   - probably the ToF sensor, but could also be the camera
+- [ ] work through physics equations to check if the code appears roughly correct
