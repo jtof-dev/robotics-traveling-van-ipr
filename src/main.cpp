@@ -1,10 +1,10 @@
-#include "PID_v1.h"
 #include "configuration.hpp"
 #include "hardware/gpio.h"
 #include "hardware/i2c.h"
 #include "hardware/pwm.h"
 #include "pico/multicore.h"
 #include "pico/stdlib.h"
+#include "pid.h"
 #include <math.h>
 #include <stdio.h>
 
