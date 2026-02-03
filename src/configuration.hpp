@@ -3,8 +3,8 @@
 
 #define ENCODER_PIN_A 2
 #define ENCODER_PIN_B 3
-#define MOTOR_IN1 5
-#define MOTOR_IN2 6
+#define MOTOR_IN1 6
+#define MOTOR_IN2 7
 
 #define I2C_PORT i2c0
 #define SDA_PIN 4

@@ -49,6 +49,17 @@ then build with CMAKE:
 
 # notes to self
 
+## pins
+
+| pin | function | description |
+|---|---|---|
+| 2 | GPIO | rotary encoder A input |
+| 3 | GPIO | rotary encoder B input |
+| 4 | I2C (SDA) | I2C data for AS5600 |
+| 5 | I2C (SCL) | I2C clock for AS5600 |
+| 6 | PWM | motor 1 IN1 |
+| 7 | PWM | motor 1 IN2 |
+
 ## DRV8871 motor driver
 
 | IN1 | IN2 |  OUT1  |  OUT2  | DESCRIPTION |
