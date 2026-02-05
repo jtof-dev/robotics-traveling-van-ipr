@@ -1,9 +1,3 @@
-[submodule "lib/as5600"]
-	path = lib/as5600
-	url = https://github.com/dancesWithMachines/dwm_pico_as5600.git
-[submodule "lib/pid"]
-	path = lib/pid
-	url = https://github.com/jtof-dev/pico-pid-library.git
 [submodule "lib/pico-sdk"]
 	path = lib/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
