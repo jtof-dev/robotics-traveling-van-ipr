@@ -51,14 +51,14 @@ then build with CMAKE:
 
 ## pins
 
-| pin | function | description |
-|---|---|---|
-| 2 | GPIO | rotary encoder A input |
-| 3 | GPIO | rotary encoder B input |
-| 4 | I2C (SDA) | I2C data for AS5600 |
-| 5 | I2C (SCL) | I2C clock for AS5600 |
-| 6 | PWM | motor 1 IN1 |
-| 7 | PWM | motor 1 IN2 |
+| pin | function  | description            |
+| --- | --------- | ---------------------- |
+| 2   | GPIO      | rotary encoder A input |
+| 3   | GPIO      | rotary encoder B input |
+| 4   | I2C (SDA) | I2C data for AS5600    |
+| 5   | I2C (SCL) | I2C clock for AS5600   |
+| 6   | PWM       | motor 1 IN1            |
+| 7   | PWM       | motor 1 IN2            |
 
 ## DRV8871 motor driver
 
@@ -72,6 +72,14 @@ then build with CMAKE:
 ## GM3865-520 dc motor encoder
 
 - the encoder outputs two data signals phased 100deg apart
+
+## AS5600 magnetic encoder
+
+- SDA -> 4 on pico
+- SDL -> 5 on pico
+- VCC -> 3.3V
+- GND -> GND on pico
+- DIR -> GND for clockwise, 3.3V for counterclockwise
 
 # submodules
 
