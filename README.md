@@ -38,7 +38,7 @@ the code needed to power an inverted pendulum robot with four motors. written fo
 
 - first, fetch all submodules with `git submodule update --init --recursive`
 
-then build with CMAKE:
+then build with CMAKE (or with `scripts/buildFresh.sh`):
 
 ```
     mdkir build
@@ -47,20 +47,43 @@ then build with CMAKE:
     make
 ```
 
-# notes to self
+# pins
 
-## pins
+## AS5600 magnetic encoder
 
-| pin | function  | description            |
-| --- | --------- | ---------------------- |
-| 2   | GPIO      | rotary encoder A input |
-| 3   | GPIO      | rotary encoder B input |
-| 4   | I2C (SDA) | I2C data for AS5600    |
-| 5   | I2C (SCL) | I2C clock for AS5600   |
-| 6   | PWM       | motor 1 IN1            |
-| 7   | PWM       | motor 1 IN2            |
+| **pin** | **connection** |
+| ------- | -------------- |
+| VCC     | 3.3v on pico   |
+| OUT     |                |
+| GND     | GND on pico    |
+| DIR     |                |
+| SCL     | 5 on pico      |
+| SDA     | 4 on pico      |
+| GPO     |                |
+
+## GM3865-520 DC motor
+
+| **pin** | **connection**         |
+| ------- | ---------------------- |
+| M+      | 12v+ from motor driver |
+| M-      | 12v- from motor driver |
+| GND     | 3.3v GND from pico     |
+| VCC     | 3.3v from pico         |
+| A       | 2 on pico              |
+| B       | 3 on pico              |
 
 ## DRV8871 motor driver
+
+| **pin** | **connection**                |
+| ------- | ----------------------------- |
+| motor+  | 12v+ to motor                 |
+| motor-  | 12v- to motor                 |
+| power+  | 12v+ from PSU                 |
+| power-  | 12v- from PSU                 |
+| IN1     | 6 on pico                     |
+| IN2     | 7 on pico                     |
+| VM      | passthrough 12v (don't use!!) |
+| GND     | passthrough ground            |
 
 | IN1 | IN2 |  OUT1  |  OUT2  | DESCRIPTION |
 | :-: | :-: | :----: | :----: | :---------- |
@@ -68,18 +91,6 @@ then build with CMAKE:
 |  0  |  1  |   L    |   H    | reverse     |
 |  1  |  0  |   H    |   L    | forward     |
 |  1  |  1  |   L    |   L    | brake       |
-
-## GM3865-520 dc motor encoder
-
-- the encoder outputs two data signals phased 100deg apart
-
-## AS5600 magnetic encoder
-
-- SDA -> 4 on pico
-- SDL -> 5 on pico
-- VCC -> 3.3V
-- GND -> GND on pico
-- DIR -> GND for clockwise, 3.3V for counterclockwise
 
 # submodules
 
