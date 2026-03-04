@@ -9,6 +9,7 @@
 #define I2C_PORT i2c0
 #define SDA_PIN 4
 #define SCL_PIN 5
+#define DIR_PIN 1
 
 #define WHEEL_DIAMETER_MM 65.0f
 #define WHEEL_CIRCUMFERENCE_MM 204.20f
@@ -18,10 +19,12 @@
 #define AS5600_ADDR 0x36
 
 // defaults
-#define PENDULUM_SETPOINT -6.0f
+#define PENDULUM_SETPOINT 88.0f
 #define CART_KP 15.0f
 #define CART_KI 0.1f
 #define CART_KD 0.5f
+
+#define MAX_DISTANCE_MM 304.8f
 
 #define CMD_UPDATE_KP 0x01
 #define CMD_UPDATE_KI 0x02

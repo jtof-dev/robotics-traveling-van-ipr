@@ -61,6 +61,10 @@ int main() {
   gpio_pull_up(SDA_PIN);
   gpio_pull_up(SCL_PIN);
 
+  gpio_init(DIR_PIN);
+  gpio_set_dir(DIR_PIN, GPIO_OUT);
+  gpio_put(DIR_PIN, 0);
+
   as5600_t pendulum_encoder = {0};
   as5600_init(SDA_PIN, SCL_PIN, &pendulum_encoder);
 
@@ -100,14 +104,23 @@ int main() {
       }
     }
 
+    float robot_distance_mm = encoder_count * MM_PER_COUNT;
+    if (fabs(robot_distance_mm) > MAX_DISTANCE_MM) {
+      set_motors(0);
+      printf("Max distance reached, stopping motors.\n");
+      while (true) {
+        tight_loop_contents();
+      }
+    }
+
     uint16_t raw_angle = as5600_read_raw_angl(&pendulum_encoder);
     angle = ((float)raw_angle / 4095.0f * 360.0f) - 180.0f;
 
-    if (fabs(angle - set_point) > 45.0f) {
-      set_motors(0);
-      sleep_ms(100);
-      continue;
-    }
+    // if (fabs(angle - set_point) > 45.0f) {
+    //   set_motors(0);
+    //   sleep_ms(100);
+    //   continue;
+    // }
 
     cartPID.Compute();
 
@@ -118,7 +131,25 @@ int main() {
     set_motors(output);
 
     printf("A: %.2f | O: %.1f | E: %ld\n", angle, output, encoder_count);
-    sleep_ms(10);
+
+    // 0x0B is the STATUS register address
+    uint8_t reg = 0x0B;
+    uint8_t status = 0;
+
+    // Request the status register
+    i2c_write_blocking(I2C_PORT, 0x36, &reg, 1, true);
+    i2c_read_blocking(I2C_PORT, 0x36, &status, 1, false);
+
+    // Extract the diagnostic bits
+    bool md = (status >> 5) & 1; // MD: Magnet Detected
+    bool ml = (status >> 4) & 1; // ML: Magnet too weak (too far away)
+    bool mh = (status >> 3) & 1; // MH: Magnet too strong (too close)
+
+    printf(
+        "Raw Status: 0x%02X | Detected: %d | Too Weak: %d | Too Strong: %d\n",
+        status, md, ml, mh);
+
+    sleep_ms(200);
   }
 
   return 0;
