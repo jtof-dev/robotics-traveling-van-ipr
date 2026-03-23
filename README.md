@@ -51,15 +51,15 @@ then build with CMAKE (or with `scripts/buildFresh.sh`):
 
 ## AS5600 magnetic encoder
 
-| **pin** | **connection** |
-| ------- | -------------- |
-| VCC     | 3.3v on pico   |
-| OUT     |                |
-| GND     | GND on pico    |
-| DIR     |                |
-| SCL     | 5 on pico      |
-| SDA     | 4 on pico      |
-| GPO     |                |
+| **pin** | **connection**              |
+| ------- | --------------------------- |
+| VCC     | 3.3v on pico                |
+| OUT     | HIGH or LOW (currently low) |
+| GND     | GND on pico                 |
+| DIR     |                             |
+| SCL     | 5 on pico                   |
+| SDA     | 4 on pico                   |
+| GPO     |                             |
 
 ## GM3865-520 DC motor
 
@@ -71,6 +71,15 @@ then build with CMAKE (or with `scripts/buildFresh.sh`):
 | VCC     | 3.3v from pico         |
 | A       | 2 on pico              |
 | B       | 3 on pico              |
+
+on new motors:
+
+- M+: white
+- M-: blue
+- GND: green
+- VCC: yellow
+- B: black
+- A: red
 
 ## DRV8871 motor driver
 
