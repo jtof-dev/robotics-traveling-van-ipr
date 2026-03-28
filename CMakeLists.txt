@@ -14,6 +14,7 @@ add_executable(ipr
 target_link_libraries(ipr
     pico_stdlib
     hardware_pwm
+    hardware_gpio
 )
 
 pico_enable_stdio_usb(ipr 1)
