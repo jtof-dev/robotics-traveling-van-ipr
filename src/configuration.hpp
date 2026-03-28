@@ -25,8 +25,25 @@
 #define CART_KD 0.5f
 
 #define MAX_DISTANCE_MM 304.8f
+// --- Physics & Motor Mapping Constants ---
 
-#define CMD_UPDATE_KP 0x01
+// Keep this at 1.0 for now. It effectively removes mass from the
+// equation so Force directly equals Acceleration.
+#define CART_MASS 1.0f
+
+// Treat this as "100% maximum effort" the PID is allowed to ask for.
+#define MAX_FORCE 100.0f
+
+// Treat this as "100% maximum speed".
+#define MAX_SPEED 100.0f
+
+// The math: 100 (Max Speed) * 2.55 = 255 (Max 8-bit PWM).
+// This cleanly maps your 0-100 speed scale to the hardware limit.
+#define SPEED_TO_PWM_RATIO 2.55f
+
+// PLACEHOLDER: You MUST replace this number with the actual value
+// you get after running the deadband calibration script!
+#define MOTOR_DEADBAND 40.0f #define CMD_UPDATE_KP 0x01
 #define CMD_UPDATE_KI 0x02
 #define CMD_UPDATE_KD 0x03
 
