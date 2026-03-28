@@ -5,7 +5,6 @@
 #include <math.h>
 #include <stdio.h>
 
-
 void set_motors(float power) {
   int pwm_val = (int)fabs(power);
   if (pwm_val > 255)
@@ -36,21 +35,25 @@ int main() {
   while (true) {
     // Spin Forward (approx 50% speed)
     printf("Spinning Forward\n");
-    set_motors(128.0f);
+    set_motors(255.0f);
     sleep_ms(4000);
+    set_motors(-255.0f);
+    sleep_ms(4000);
+    set_motors(0);
+    sleep_ms(1000000);
 
     // Stop briefly
-    set_motors(0);
-    sleep_ms(500);
-
-    // Spin Backward
-    printf("Spinning Backward\n");
-    set_motors(-128.0f);
-    sleep_ms(4000);
-
-    // Stop briefly
-    set_motors(0);
-    sleep_ms(500);
+    // set_motors(0);
+    // sleep_ms(500);
+    //
+    // // Spin Backward
+    // printf("Spinning Backward\n");
+    // set_motors(-128.0f);
+    // sleep_ms(4000);
+    //
+    // // Stop briefly
+    // set_motors(0);
+    // sleep_ms(500);
   }
 
   return 0;
