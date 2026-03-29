@@ -1,9 +1,16 @@
 #include "configuration.hpp"
 #include "hardware/gpio.h"
+#include "hardware/i2c.h"
 #include "hardware/pwm.h"
+#include "pico/multicore.h"
 #include "pico/stdlib.h"
+#include "pid.h"
 #include <math.h>
 #include <stdio.h>
+
+extern "C" {
+#include "dwm_pico_AS5600.h"
+}
 
 volatile long encoder_count = 0;
 
@@ -21,34 +28,64 @@ void encoder_callback(uint gpio, uint32_t events) {
   }
 }
 
-void raw_motor_drive(int pwm_val) {
-  if (pwm_val > 0) {
+// Updated set_motors with Deadband Mapping
+void set_motors(float power) {
+  // 1. Handle complete stop
+  if (power == 0.0f) {
+    pwm_set_gpio_level(MOTOR_IN1,
+                       255); // Or 0, depending on your brake preference
+    pwm_set_gpio_level(MOTOR_IN2, 255);
+    return;
+  }
+
+  // 2. Map requested power to the usable motor range
+  float abs_power = fabs(power);
+  if (abs_power > 255.0f)
+    abs_power = 255.0f;
+
+  float mapped_power =
+      MOTOR_DEADBAND + (abs_power / 255.0f) * (255.0f - MOTOR_DEADBAND);
+  int pwm_val = (int)mapped_power;
+
+  // 3. Drive motors based on original sign
+  if (power > 0) {
     pwm_set_gpio_level(MOTOR_IN1, pwm_val);
     pwm_set_gpio_level(MOTOR_IN2, 0);
-  } else if (pwm_val < 0) {
+  } else if (power < 0) {
     pwm_set_gpio_level(MOTOR_IN1, 0);
-    pwm_set_gpio_level(MOTOR_IN2, abs(pwm_val));
-  } else {
-    pwm_set_gpio_level(MOTOR_IN1, 0);
-    pwm_set_gpio_level(MOTOR_IN2, 0);
+    pwm_set_gpio_level(MOTOR_IN2, pwm_val);
+  }
+}
+
+void core1_entry() {
+  while (1) {
+    tight_loop_contents();
   }
 }
 
 int main() {
   stdio_init_all();
+  sleep_ms(2000);
 
-  // Give you 5 seconds to open the serial monitor and get ready
-  printf("Starting deadband calibration in 5 seconds...\n");
-  sleep_ms(5000);
+  i2c_init(I2C_PORT, 400 * 1000);
+  gpio_set_function(SDA_PIN, GPIO_FUNC_I2C);
+  gpio_set_function(SCL_PIN, GPIO_FUNC_I2C);
+  gpio_pull_up(SDA_PIN);
+  gpio_pull_up(SCL_PIN);
 
-  // Init PWM
+  // gpio_init(DIR_PIN);
+  // gpio_set_dir(DIR_PIN, GPIO_OUT);
+  // gpio_put(DIR_PIN, 0);
+
+  as5600_t pendulum_encoder = {0};
+  as5600_init(SDA_PIN, SCL_PIN, &pendulum_encoder);
+
   gpio_set_function(MOTOR_IN1, GPIO_FUNC_PWM);
   gpio_set_function(MOTOR_IN2, GPIO_FUNC_PWM);
   uint slice = pwm_gpio_to_slice_num(MOTOR_IN1);
   pwm_set_wrap(slice, 255);
   pwm_set_enabled(slice, true);
 
-  // Init Encoders
   gpio_init(ENCODER_PIN_A);
   gpio_init(ENCODER_PIN_B);
   gpio_pull_up(ENCODER_PIN_A);
@@ -59,43 +96,93 @@ int main() {
   gpio_set_irq_enabled(ENCODER_PIN_B, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL,
                        true);
 
-  int test_pwm = 0;
-  encoder_count = 0; // Reset just in case
+  float angle = 0.0f;
+  float output = 0.0f; // This is now FORCE
+  float set_point = PENDULUM_SETPOINT;
 
-  printf("Ramping up PWM to find forward deadband...\n");
+  // PID Output limits changed to match MAX_FORCE
+  PID cartPID(&angle, &output, &set_point, CART_KP, CART_KI, CART_KD, REVERSE);
+  cartPID.SetMode(AUTOMATIC);
+  cartPID.SetOutputLimits(-MAX_FORCE, MAX_FORCE);
+
+  multicore_launch_core1(core1_entry);
+
+  float current_speed = 0.0f;
+  uint32_t last_time = time_us_32();
 
   while (true) {
-    raw_motor_drive(test_pwm);
+    // 1. Calculate time delta (dt)
+    uint32_t current_time = time_us_32();
+    float dt = (current_time - last_time) / 1000000.0f;
+    last_time = current_time;
 
-    // If the encoder has moved more than 3 ticks, we overcame static friction
-    if (abs(encoder_count) > 3) {
-      raw_motor_drive(0); // STOP!
-      printf("========================================\n");
-      printf("MOVEMENT DETECTED!\n");
-      printf("Your Forward MOTOR_DEADBAND is approx: %d\n", test_pwm);
-      printf("========================================\n");
-
-      // Infinite loop to lock the script so it doesn't run away
-      while (true) {
-        sleep_ms(1000);
+    if (multicore_fifo_rvalid()) {
+      uint32_t cmd = multicore_fifo_pop_blocking();
+      if (cmd == CMD_UPDATE_KP) {
+        uint32_t raw_val = multicore_fifo_pop_blocking();
+        float new_kp = (float)raw_val / 100.0f;
+        cartPID.SetTunings(new_kp, cartPID.GetKi(), cartPID.GetKd());
       }
     }
 
-    test_pwm++;
-
-    if (test_pwm > 255) {
-      raw_motor_drive(0);
-      printf("Hit max PWM (255) without movement. Check motor power!\n");
+    float robot_distance_mm = encoder_count * MM_PER_COUNT;
+    if (fabs(robot_distance_mm) > MAX_DISTANCE_MM) {
+      set_motors(0);
+      printf("Max distance reached, stopping motors.\n");
       while (true) {
-        sleep_ms(1000);
+        tight_loop_contents();
       }
     }
 
-    // Print current attempt
-    printf("Testing PWM: %d | Encoder: %ld\n", test_pwm, encoder_count);
+    uint16_t raw_angle = as5600_read_raw_angl(&pendulum_encoder);
+    angle = ((float)raw_angle / 4095.0f * 360.0f) - 180.0f;
 
-    // Wait 100ms before increasing power to let physics react
-    sleep_ms(100);
+    // 2. Compute PID to get requested Force
+    cartPID.Compute();
+    float force = output;
+
+    if (fabs(angle - set_point) < 2.0f) {
+      force = 0.0f; // Deadband for perfect balance
+    }
+
+    // 3. Physics Pipeline: Force -> Accel -> Speed -> PWM
+    float acceleration = force / CART_MASS;
+    current_speed += (acceleration * dt);
+
+    // Slight damping to prevent infinite drift
+    current_speed *= 0.98f;
+
+    if (current_speed > MAX_SPEED)
+      current_speed = MAX_SPEED;
+    if (current_speed < -MAX_SPEED)
+      current_speed = -MAX_SPEED;
+
+    float target_pwm = current_speed * SPEED_TO_PWM_RATIO;
+    set_motors(target_pwm);
+
+    printf("A: %.2f | F: %.1f | S: %.2f | PWM: %.0f | E: %ld\n", angle, force,
+           current_speed, target_pwm, encoder_count);
+
+    // 4. AS5600 Magnetic Status Decoding
+    // 0x0B is the STATUS register address
+    uint8_t reg = 0x0B;
+    uint8_t status = 0;
+
+    // Request the status register
+    i2c_write_blocking(I2C_PORT, 0x36, &reg, 1, true);
+    i2c_read_blocking(I2C_PORT, 0x36, &status, 1, false);
+
+    // Extract the diagnostic bits
+    bool md = (status >> 5) & 1; // MD: Magnet Detected
+    bool ml = (status >> 4) & 1; // ML: Magnet too weak (too far away)
+    bool mh = (status >> 3) & 1; // MH: Magnet too strong (too close)
+
+    printf(
+        "Raw Status: 0x%02X | Detected: %d | Too Weak: %d | Too Strong: %d\n",
+        status, md, ml, mh);
+
+    // Run much faster for pendulum stability
+    sleep_ms(10);
   }
 
   return 0;

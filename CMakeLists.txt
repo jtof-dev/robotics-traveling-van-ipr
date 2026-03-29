@@ -25,4 +25,5 @@ target_link_libraries(ipr
 )
 
 pico_enable_stdio_usb(ipr 1)
+pico_enable_stdio_uart(ipr 0)
 pico_add_extra_outputs(ipr)
