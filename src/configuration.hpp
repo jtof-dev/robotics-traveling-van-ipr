@@ -9,6 +9,7 @@
 #define I2C_PORT i2c0
 #define SDA_PIN 4
 #define SCL_PIN 5
+#define DIR_PIN 1
 
 #define WHEEL_DIAMETER_MM 65.0f
 #define WHEEL_CIRCUMFERENCE_MM 204.20f

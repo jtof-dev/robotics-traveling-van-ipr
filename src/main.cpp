@@ -73,9 +73,9 @@ int main() {
   gpio_pull_up(SDA_PIN);
   gpio_pull_up(SCL_PIN);
 
-  // gpio_init(DIR_PIN);
-  // gpio_set_dir(DIR_PIN, GPIO_OUT);
-  // gpio_put(DIR_PIN, 0);
+  gpio_init(DIR_PIN);
+  gpio_set_dir(DIR_PIN, GPIO_OUT);
+  gpio_put(DIR_PIN, 0);
 
   as5600_t pendulum_encoder = {0};
   as5600_init(SDA_PIN, SCL_PIN, &pendulum_encoder);
