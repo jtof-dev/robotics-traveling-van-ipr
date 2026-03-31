@@ -51,15 +51,15 @@ then build with CMAKE (or with `scripts/buildFresh.sh`):
 
 ## AS5600 magnetic encoder
 
-| **pin** | **connection**              |
-| ------- | --------------------------- |
-| VCC     | 3.3v on pico                |
-| OUT     | HIGH or LOW (currently low) |
-| GND     | GND on pico                 |
-| DIR     |                             |
-| SCL     | 5 on pico                   |
-| SDA     | 4 on pico                   |
-| GPO     |                             |
+| **pin** | **connection**              | **color** |
+| ------- | --------------------------- | --------- |
+| VCC     | 3.3v on pico                | red       |
+| OUT     | --                          | --        |
+| GND     | GND on pico                 | black     |
+| DIR     | HIGH or LOW (currently low) | black     |
+| SCL     | 5 on pico                   | blue      |
+| SDA     | 4 on pico                   | white     |
+| GPO     | --                          | --        |
 
 ## GM3865-520 DC motor
 
