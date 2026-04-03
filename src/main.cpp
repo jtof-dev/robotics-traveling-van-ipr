@@ -1,9 +1,11 @@
-#include "configuration.hpp"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
 #include <math.h>
 #include <stdio.h>
+
+constexpr int MOTOR_IN1 = 6;
+constexpr int MOTOR_IN2 = 7;
 
 void set_motors(float power) {
   int pwm_val = (int)fabs(power);
@@ -33,14 +35,13 @@ int main() {
   pwm_set_enabled(slice, true);
 
   while (true) {
-    // Spin Forward (approx 50% speed)
     printf("Spinning Forward\n");
-    set_motors(255.0f);
-    sleep_ms(4000);
-    set_motors(-255.0f);
-    sleep_ms(4000);
+    set_motors(70.0f);
+    sleep_ms(2000);
+    set_motors(-70.0f);
+    sleep_ms(1000);
     set_motors(0);
-    sleep_ms(1000000);
+    sleep_ms(100000);
 
     // Stop briefly
     // set_motors(0);
