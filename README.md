@@ -1,37 +1,59 @@
 # robotics traveling van inverted pendulum robot
 
-the code needed to power an inverted pendulum robot with four motors. written for a generic RP2040 board
-
-- I referenced [Ian Carey's inverted pendulum code](https://gist.github.com/careyi3/d087f707b33c665915bd611e5514a355) for help with organizing the code, thank you!!
+everything needed to power an inverted pendulum robot with four motors, including the code, parts lists, CAD model, and instructions.
 
 ```ascii flowchart
-      ┌───────────────────┐          ┌─────────┐          ┌──────────────────┐
-      │                   │          │         │          │                  │
-      │ send brake signal │◄─────────┤ setup() ├─────────►│ initialize pins  │
-      │     to motors     │          │         │          │                  │
-      │                   │          └────┬────┘          └──────────────────┘
-      └───────────────────┘               │
-                                          │
-                                          │
-                                          │
-                                          │
-                                          ▼
-┌─────────────────────────┐          ┌────────┐           ┌───────────────────────────────┐
-│                         │          │        │           │                               │
-│ send specific speed PWM ├─────────►│ loop() ┼──────────►│ read magnetic encoder values  │
-│     value to motors     │          │        │           │                               │
-│                         │          └────────┘           └──────────────────┬────────────┘
-└─────────────────────────┘                                                  │
-       ▲                                                                     │
-       │                                                                     │
-       │                                                                     │
-       │                                                                     │
-       │                                                                     │
-       │     ┌─────────────────────┐            ┌─────────────────────┐      │
-       │     │                     │            │                     │      │
-       └─────┤ adjust output value │◄───────────┤ run PID calculation │◄─────┘
-             │                     │            │                     │
-             └─────────────────────┘            └─────────────────────┘
+                             ┌─────────┐
+                             │         │
+                             │ initial │
+                             │  boot   │
+                             │         │
+                             └────┬────┘
+                                  │
+                                  │
+                                  ▼
+                        ┌───────────────────┐
+                        │                   │
+                        │ send brake signal │
+                        │     to motors     │
+                        │                   │
+                        └─────────┬─────────┘
+                                  │
+                                  │
+                                  ▼
+                           ┌─────────────┐
+                           │             │
+                           │ set up pins │
+                           │             │
+                           └──────┬──────┘
+                                  │
+                                  │
+                                  ▼
+                             ┌────────┐
+                             │        │
+                             │ main() │
+                             │        │
+                             └────┬───┘
+                                  │
+                                  │
+                                  │
+                                  ▼
+┌─────────────────┐      ┌──────────────────┐      ┌────────────────┐
+│                 │      │                  │      │                │
+│ send speed PWM  ├─────►│ write a frame to ├─────►│ read magnetic  │
+│ value to motors │      │ the touchscreen  │      │ encoder values │
+│                 │      │                  │      │                │
+└─────────────────┘      └──────────────────┘      └─────────────┬──┘
+   ▲                                                             │
+   │                                                             │
+   │                                                             │
+   │                                                             │
+   │                                                             │
+   │     ┌─────────────────────┐      ┌─────────────────────┐    │
+   │     │                     │      │                     │    │
+   └─────┤ adjust output value │◄─────┤ run PID calculation │◄───┘
+         │                     │      │                     │
+         └─────────────────────┘      └─────────────────────┘
 ```
 
 ## building
@@ -41,10 +63,12 @@ the code needed to power an inverted pendulum robot with four motors. written fo
 then build with CMAKE (or with `scripts/buildFresh.sh`):
 
 ```
+
     mdkir build
     cd build
     cmake ..
     make
+
 ```
 
 # pins
@@ -113,3 +137,7 @@ on new motors:
 - [ ] change code to use a digital encoder instead of a potentiometer
 - [ ] migrate code to use a different board
 - [ ] implement touch screen and UI
+
+```
+
+```
