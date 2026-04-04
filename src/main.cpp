@@ -4,8 +4,8 @@
 #include <math.h>
 #include <stdio.h>
 
-constexpr int MOTOR_IN1 = 6;
-constexpr int MOTOR_IN2 = 7;
+int MOTOR_IN1 = 6;
+int MOTOR_IN2 = 7;
 
 void set_motors(float power) {
   int pwm_val = (int)fabs(power);
@@ -33,28 +33,22 @@ int main() {
   uint slice = pwm_gpio_to_slice_num(MOTOR_IN1);
   pwm_set_wrap(slice, 255);
   pwm_set_enabled(slice, true);
+  const uint LED_PIN = PICO_DEFAULT_LED_PIN;
+  gpio_init(LED_PIN);
+  gpio_set_dir(LED_PIN, GPIO_OUT);
 
   while (true) {
-    printf("Spinning Forward\n");
-    set_motors(70.0f);
-    sleep_ms(2000);
-    set_motors(-70.0f);
+    printf("spinning forward\n");
+    gpio_put(LED_PIN, 1);
+    set_motors(50.0f);
+    sleep_ms(1000);
+    /*set_motors(0);
+    sleep_ms(500);
+    printf("spinning backward\n");
+    set_motors(-100.0f);
     sleep_ms(1000);
     set_motors(0);
-    sleep_ms(100000);
-
-    // Stop briefly
-    // set_motors(0);
-    // sleep_ms(500);
-    //
-    // // Spin Backward
-    // printf("Spinning Backward\n");
-    // set_motors(-128.0f);
-    // sleep_ms(4000);
-    //
-    // // Stop briefly
-    // set_motors(0);
-    // sleep_ms(500);
+    sleep_ms(2000);*/
   }
 
   return 0;
