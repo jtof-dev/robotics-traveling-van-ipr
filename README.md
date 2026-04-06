@@ -1,6 +1,6 @@
 # robotics traveling van inverted pendulum robot
 
-everything needed to power an inverted pendulum robot with four motors, including the code, parts lists, CAD model, and instructions.
+everything needed to power an inverted pendulum robot (ipr) with four motors, including the code, parts lists, CAD model, and instructions. when you're done, check out our [ball and beam balance robot](https://github.com/jtof-dev/robotics-traveling-van-bbb) and our [website](https://sce.nau.edu/capstone/projects/EE/2026/RoboVan/)
 
 ```ascii flowchart
                                 ┌─────────┐
@@ -158,3 +158,21 @@ or, install `matplotlib` and run normally
 | VCC     | 3.3v from pico         | yellow         |
 | A       | 2 on pico              | red            |
 | B       | 3 on pico              | black          |
+
+# contributors
+
+### [andy babcock](https://github.com/jtof-dev)
+
+- developed the electronics and balancing software for the inverted pendulum robot
+
+### [kaden zaremba](https://github.com/kadenisuhhh)
+
+- developed the electronics and the touchscreen software for the inverted pendulum robot
+
+### [andres gonzales]()
+
+- developed the CAD model and helped with assembly
+
+### [colin parsinia]()
+
+- developed the CAD model and helped with assembly
