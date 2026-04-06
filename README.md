@@ -51,6 +51,7 @@ everything needed to power an inverted pendulum robot with four motors, includin
 - **datasheets/**: datasheets for the specific parts used in this robot
 - **lib/**: contains all submodules
 - **scripts/**: all scripts commonly used while writing code
+- **sims/**: any python scripts used to model the behavior of the inverted pendulum
 - **src/**: our own written code, split into a `configuration.hpp` and `main.cpp`, along with some extra functions split off into individual files
 
 # software
@@ -83,6 +84,18 @@ picotool load -f -x flash.uf2
 - [dancesWithMachines/dwm_pico_as45600](https://github.com/dancesWithMachines/dwm_pico_as5600)
 - [raspberrypi/pico-sdk](https://github.com/raspberrypi/pico-sdk)
 - [jtof-dev/pico-pid-library](https://github.com/jtof-dev/pico-pid-library)
+
+## sims
+
+- located in `sims/`, and models the expected behavior of the robot. theoretically, it should produce similar gain values to what will be used on the physical robot
+- the python environment is managed with `uv`:
+
+```bash
+uv sync
+uv run main.py
+```
+
+or, install `matplotlib` and run normally
 
 # hardware
 
