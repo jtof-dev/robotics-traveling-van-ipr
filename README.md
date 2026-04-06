@@ -44,24 +44,66 @@ everything needed to power an inverted pendulum robot with four motors, includin
             └─────────────────────┘      └─────────────────────┘
 ```
 
+# notes
+
+## directory structure
+
+- **datasheets/**: datasheets for the specific parts used in this robot
+- **lib/**: contains all submodules
+- **scripts/**: all scripts commonly used while writing code
+- **src/**: our own written code, split into a `configuration.hpp` and `main.cpp`, along with some extra functions split off into individual files
+
+# software
+
 ## building
 
-- first, fetch all submodules with `git submodule update --init --recursive`
+- first, fetch all submodules with `git submodule update --init --recursive` or delete and re-clone all submodules with `scripts/submoduleSetup.sh`
 
 then build with CMAKE (or with `scripts/buildFresh.sh`):
 
-```
-
+```bash
     mdkir build
     cd build
     cmake ..
     make
-
 ```
 
-# pins
+(note: updating configurations in `src/configuration.hpp` does not trigger a proper re-build, so only running `make` will often not be enough)
 
-## AS5600 magnetic encoder
+## uploading
+
+- to flash the compiled `.uf2`, either reboot the pico into BOOTSEL mode (hold the BOOTSEL button and plug in the pico), or use `picotool` (or `scripts/upload.sh`):
+
+```bash
+picotool load -f -x flash.uf2
+```
+
+## submodules
+
+- [dancesWithMachines/dwm_pico_as45600](https://github.com/dancesWithMachines/dwm_pico_as5600)
+- [raspberrypi/pico-sdk](https://github.com/raspberrypi/pico-sdk)
+- [jtof-dev/pico-pid-library](https://github.com/jtof-dev/pico-pid-library)
+
+# hardware
+
+## parts list
+
+- [AS5600](./datasheets/AS5600 datasheet.pdf) magnetic encoder
+- [DRV8871](./datasheets/DRV8871 datasheet.pdf) motor driver
+- GM3865-520 dc motor
+- touchscreen with [ST7796S](./datasheets/ST7796S datasheet.pdf) display driver
+- raspberry pi pico or [RP2040](./datasheets/RP2040 datasheet.pdf) compatible board
+
+### generic parts
+
+- 4-pack of 3.3V batteries (in series for 13V total), matching BMS, and charger
+  - be sure to match max voltage, current, and battery chemistry type between all three components
+- step-down voltage converter to 3.3V
+- 470uF 25V electrolytic capacitor
+
+## pin configurations
+
+### AS5600 magnetic encoder
 
 | **pin** | **connection**              | **color** |
 | ------- | --------------------------- | --------- |
@@ -73,27 +115,7 @@ then build with CMAKE (or with `scripts/buildFresh.sh`):
 | SDA     | 4 on pico                   | white     |
 | GPO     | --                          | --        |
 
-## GM3865-520 DC motor
-
-| **pin** | **connection**         |
-| ------- | ---------------------- |
-| M+      | 12v+ from motor driver |
-| M-      | 12v- from motor driver |
-| GND     | 3.3v GND from pico     |
-| VCC     | 3.3v from pico         |
-| A       | 2 on pico              |
-| B       | 3 on pico              |
-
-on new motors:
-
-- M+: white
-- M-: blue
-- GND: green
-- VCC: yellow
-- B: black
-- A: red
-
-## DRV8871 motor driver
+### DRV8871 motor driver
 
 | **pin** | **connection**                |
 | ------- | ----------------------------- |
@@ -106,26 +128,20 @@ on new motors:
 | VM      | passthrough 12v (don't use!!) |
 | GND     | passthrough ground            |
 
-| IN1 | IN2 |  OUT1  |  OUT2  | DESCRIPTION |
-| :-: | :-: | :----: | :----: | :---------- |
-|  0  |  0  | high-z | high-z | coast       |
-|  0  |  1  |   L    |   H    | reverse     |
-|  1  |  0  |   H    |   L    | forward     |
-|  1  |  1  |   L    |   L    | brake       |
+| **IN1** | **IN2** | **OUT1** | **OUT2** | **description** |
+| :-----: | :-----: | :------: | :------: | :-------------- |
+|    0    |    0    |  high-z  |  high-z  | coast           |
+|    0    |    1    |    L     |    H     | reverse         |
+|    1    |    0    |    H     |    L     | forward         |
+|    1    |    1    |    L     |    L     | brake           |
 
-# submodules
+### GM3865-520 DC motor
 
-- [dancesWithMachines/dwm_pico_as45600](https://github.com/dancesWithMachines/dwm_pico_as5600)
-- [raspberrypi/pico-sdk](https://github.com/raspberrypi/pico-sdk)
-- [jtof-dev/pico-pid-library](https://github.com/jtof-dev/pico-pid-library)
-
-# to-do
-
-- [ ] add code to self-correct robot when far away from origin
-- [ ] change code to use a digital encoder instead of a potentiometer
-- [ ] migrate code to use a different board
-- [ ] implement touch screen and UI
-
-```
-
-```
+| **pin** | **connection**         | **wire color** |
+| :------ | :--------------------- | :------------- |
+| M+      | 12v+ from motor driver | white          |
+| M-      | 12v- from motor driver | blue           |
+| GND     | 3.3v GND from pico     | green          |
+| VCC     | 3.3v from pico         | yellow         |
+| A       | 2 on pico              | red            |
+| B       | 3 on pico              | black          |
