@@ -101,11 +101,11 @@ or, install `matplotlib` and run normally
 
 ## parts list
 
-- [AS5600](./datasheets/AS5600 datasheet.pdf) magnetic encoder
-- [DRV8871](./datasheets/DRV8871 datasheet.pdf) motor driver
+- [AS5600](./datasheets/AS5600_datasheet.pdf) magnetic encoder
+- [DRV8871](./datasheets/DRV8871_datasheet.pdf) motor driver
 - GM3865-520 dc motor
-- touchscreen with [ST7796S](./datasheets/ST7796S datasheet.pdf) display driver
-- raspberry pi pico or [RP2040](./datasheets/RP2040 datasheet.pdf) compatible board
+- touchscreen with [ST7796S](./datasheets/ST7796S_datasheet.pdf) display driver
+- raspberry pi pico or [RP2040](./datasheets/RP2040_datasheet.pdf) compatible board
 
 ### generic parts
 
@@ -114,7 +114,7 @@ or, install `matplotlib` and run normally
 - step-down voltage converter to 3.3V
 - 470uF 25V electrolytic capacitor
 
-## pin configurations
+## pin configuration
 
 ### AS5600 magnetic encoder
 
