@@ -103,9 +103,9 @@ or, install `matplotlib` and run normally
 
 - [AS5600](./datasheets/AS5600_datasheet.pdf) magnetic encoder
 - [DRV8871](./datasheets/DRV8871_datasheet.pdf) motor driver
-- GM3865-520 dc motor
-- touchscreen with [ST7796S](./datasheets/ST7796S_datasheet.pdf) display driver
+- [GM3865-520](https://web.archive.org/web/20260407004016/https://www.amazon.com/dp/B0F1N9VZSK) dc motor
 - raspberry pi pico or [RP2040](./datasheets/RP2040_datasheet.pdf) compatible board
+- touchscreen with [ST7796S](./datasheets/ST7796S_datasheet.pdf) display driver
 
 ### generic parts
 
@@ -167,7 +167,15 @@ or, install `matplotlib` and run normally
 
 ### [kaden zaremba](https://github.com/kadenisuhhh)
 
-- developed the electronics and the touchscreen software for the inverted pendulum robot
+- developed the touchscreen software
+
+### [david jimenez]()
+
+- assisted with the electronics design and assembly
+
+### [kyle draper](https://github.com/Kdra-bit)
+
+- assisted with the electronics design and bug-fixing
 
 ### [andres gonzales]()
 
