@@ -169,7 +169,7 @@ or, install `matplotlib` and run normally
 
 - developed the touchscreen software
 
-### [david jimenez]()
+### [david jimenez](https://www.linkedin.com/in/davidkjimenez)
 
 - assisted with the electronics design and assembly
 
@@ -177,10 +177,10 @@ or, install `matplotlib` and run normally
 
 - assisted with the electronics design and bug-fixing
 
-### [andres gonzales]()
+### [andres gonzales](https://github.com/AndresGonzales-hub)
 
 - developed the CAD model and helped with assembly
 
-### [colin parsinia]()
+### [colin parsinia](https://www.linkedin.com/in/colin-parsinia-9b55a7176/)
 
 - developed the CAD model and helped with assembly
