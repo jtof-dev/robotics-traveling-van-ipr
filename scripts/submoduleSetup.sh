@@ -11,9 +11,10 @@ LIBS=(
     "lib/pid | https://github.com/jtof-dev/pico-pid-library.git"
 )
 
-$REPO_ROOT = $(git rev-parse --show-toplevel)
+pwd=$(pwd)
+repoRoot=$(git rev-parse --show-toplevel)
 
-cd "$REPO_ROOT" 
+cd "$repoRoot" 
 
 for entry in "${LIBS[@]}"; do
     # Split the string by the pipe symbol "|"
@@ -58,4 +59,4 @@ echo "Fetching all nested dependencies..."
 echo "----------------------------------------"
 git submodule update --init --recursive
 
-cd scripts/
+cd "$pwd"
