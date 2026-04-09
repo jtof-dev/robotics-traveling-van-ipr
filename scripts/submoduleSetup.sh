@@ -11,7 +11,9 @@ LIBS=(
     "lib/pid | https://github.com/jtof-dev/pico-pid-library.git"
 )
 
-cd ../
+$REPO_ROOT = $(git rev-parse --show-toplevel)
+
+cd "$REPO_ROOT" 
 
 for entry in "${LIBS[@]}"; do
     # Split the string by the pipe symbol "|"
