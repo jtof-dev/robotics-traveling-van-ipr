@@ -99,7 +99,7 @@ or, install `matplotlib` and run normally
 
 # hardware
 
-![circuit diagram](./datasheets/bbb_circuit_diagram.webp)
+![circuit diagram](./datasheets/ipr_circuit_diagram.webp)
 
 ## parts list
 
