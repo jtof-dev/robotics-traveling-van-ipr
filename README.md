@@ -99,6 +99,8 @@ or, install `matplotlib` and run normally
 
 # hardware
 
+![circuit diagram](./datasheets/bbb_circuit_diagram.webp)
+
 ## parts list
 
 - [AS5600](./datasheets/AS5600_datasheet.pdf) magnetic encoder
