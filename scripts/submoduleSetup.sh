@@ -6,9 +6,9 @@
 # Format: "local/folder/path | https://github.com/... | optional_branch"
 # ==========================================
 LIBS=(
-    "lib/pico-sdk | https://github.com/raspberrypi/pico-sdk.git"
     "lib/as5600 | https://github.com/dancesWithMachines/dwm_pico_as5600.git"
     "lib/pid | https://github.com/jtof-dev/pico-pid-library.git"
+    "lib/TFT_eSPI | https://github.com/Bodmer/TFT_eSPI.git"
 )
 
 pwd=$(pwd)
