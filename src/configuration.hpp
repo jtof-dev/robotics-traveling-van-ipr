@@ -28,7 +28,7 @@
 #define COUNTS_PER_REV 2080.0f
 #define MM_PER_COUNT 0.09817f
 
-// defaults
+// defaults (Note: You will likely need to retune these for a speed-based PID)
 #define PENDULUM_SETPOINT 88.0f
 #define CART_KP 15.0f
 #define CART_KI 0.1f
@@ -36,14 +36,7 @@
 
 #define MAX_DISTANCE_MM 304.8f
 
-// keep this at 1.0 for now. It effectively removes mass from the equation so
-// force directly equals acceleration
-#define CART_MASS 1.0f
-
-// treat this as "100% maximum effort" the PID is allowed to ask for.
-#define MAX_FORCE 100.0f
-
-// treat this as "100% maximum speed".
+// treat this as "100% maximum speed" the PID is allowed to ask for.
 #define MAX_SPEED 100.0f
 
 // 100 (Max Speed) * 2.55 = 255 (Max 8-bit PWM)

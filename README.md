@@ -184,11 +184,11 @@ or, install `matplotlib` and run normally
 | SDI (MOSI) | GP19 | SPI data input (`TFT_MOSI`) | blue |
 | SCK | GP18 | SPI clock (`TFT_SCLK`) | purple |
 | LED | external 3.3V | backlight power. connect to 3.3V external power, it will overdraw the pico if connected to a data pin | white |
-| SDO (MISO) | GP16 | SPI data output (`TFT_MISO`) | gray |
-| CTP_SCL | **GP27** | I2C1 clock (capacitive touch) | orange |
-| CTP_RST | **GP10** | touch reset | yellow |
-| CTP_SDA | **GP26** | I2C1 data (capacitive touch) | green |
-| CTP_INT | **GP11** | touch interrupt | blue |
+| SDO (MISO) | GP0 | SPI data output (`TFT_MISO`) | gray |
+| CTP_SCL | GP27 | I2C1 clock (capacitive touch) | orange |
+| CTP_RST | GP10 | touch reset | yellow |
+| CTP_SDA | GP26 | I2C1 data (capacitive touch) | green |
+| CTP_INT | GP11 | touch interrupt | blue |
 | SD_CS | -- | SD card chip select (shares SPI bus with TFT) | -- |
 
 # contributors
