@@ -113,6 +113,9 @@ or, install `matplotlib` and run normally
 
 ![circuit diagram](./datasheets/ipr_circuit_diagram.webp)
 
+- for CAD model assembly and instructions, check out [`CAD/`](https://github.com/jtof-dev/robotics-traveling-van-ipr/tree/main/CAD)
+- for PCB models, check out [`PCB/`](https://github.com/jtof-dev/robotics-traveling-van-ipr/tree/main/PCB)
+
 ## parts list
 
 - [AS5600](./datasheets/AS5600_datasheet.pdf) magnetic encoder
